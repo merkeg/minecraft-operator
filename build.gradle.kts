@@ -1,6 +1,8 @@
+
 plugins {
     java
     id("io.quarkus")
+    id("io.freefair.lombok") version "8.14"
 }
 
 repositories {
@@ -13,19 +15,26 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
+    implementation("io.quarkus:quarkus-container-image-jib")
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:quarkus-operator-sdk-bom:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-rest")
     implementation("io.quarkus:quarkus-rest-jackson")
     implementation("io.quarkus:quarkus-config-yaml")
     implementation("io.quarkiverse.operatorsdk:quarkus-operator-sdk")
+    implementation("io.quarkiverse.operatorsdk:quarkus-operator-sdk-bundle-generator")
     implementation("io.quarkus:quarkus-arc")
+    implementation("io.quarkus:quarkus-hibernate-validator")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
 }
 
 group = "de.merkeg.openmc"
-version = "1.0.0-SNAPSHOT"
+
+val versionFromProperty: String? by project
+version = versionFromProperty ?: "NONE-CI"
+
+
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21

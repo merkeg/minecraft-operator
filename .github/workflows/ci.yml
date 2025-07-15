@@ -1,12 +1,12 @@
 ## A basic GitHub Actions workflow for your Quarkus application.
 
-name: CI build
+name: Build
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  tags:
+    - *
 
 jobs:
   build:
@@ -23,6 +23,43 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-
-      - name: Build
-        run: ./gradlew build
+      - name: Determine Channel
+        id: channel
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "channel=stable" >> $GITHUB_OUTPUT
+          else
+            echo "channel=staging" >> $GITHUB_OUTPUT
+          fi
+      - name: Determine Version
+        id: version
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          else
+            echo "VERSION=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
+          fi
+      - name: Login to Github Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push container image to GitHub Container Registry
+        env:
+          REGISTRY: ghcr.io
+          GROUP: ${{ github.repository_owner }}
+          IMAGE: ${{ github.event.repository.name }}
+          K8S_NAMESPACE: ${{ github.event.repository.name }}
+        run: |
+          ./gradlew build \
+            -Pversion=$VERSION
+            -Dquarkus.container-image.build=true \
+            -Dquarkus.container-image.push=true \
+            -Dquarkus.container-image.registry=$REGISTRY \
+            -Dquarkus.container-image.group=$GROUP \
+            -Dquarkus.container-image.name=$IMAGE \
+            -Dquarkus.kubernetes.namespace=$K8S_NAMESPACE \
+            -Dquarkus.operator-sdk.bundle.channels=${{ steps.channel.outputs.channel }}
+      
+        
