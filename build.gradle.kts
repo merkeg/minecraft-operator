@@ -31,8 +31,8 @@ dependencies {
 
 group = "de.merkeg.openmc"
 
-val versionFromProperty: String? by project
-version = versionFromProperty ?: "NONE-CI"
+val versionProperty: String? = project.findProperty("version") as String?
+version = versionProperty ?: "NONE-CI"
 
 
 
