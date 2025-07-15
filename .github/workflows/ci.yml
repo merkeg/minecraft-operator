@@ -59,6 +59,7 @@ jobs:
           IMAGE: ${{ github.event.repository.name }}
           K8S_NAMESPACE: ${{ github.event.repository.name }}
         run: |
+          echo "Version $VERSION"
           ./gradlew build \
             -Pversion=$VERSION \
             -Dquarkus.container-image.build=true \
