@@ -9,7 +9,7 @@ on:
       - feature/*
       - bugfix/*
     tags:
-      - *
+      - '*'
 
 jobs:
   build:
