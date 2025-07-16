@@ -14,6 +14,35 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - name: Get tags
+        id: get_tags
+        run: |
+          git fetch --tags
+          tags=$(git tag --list "1.*" --sort=v:refname)
+          echo "tags=$tags" >> $GITHUB_OUTPUT
+      - name: Generate YAML file
+        env:
+          OPERATOR_PATH: "./catalog/minecraft-operator/minecraft-operator-template.yaml"
+        run: |
+          echo "Schema: olm.semver" > $OPERATOR_PATH
+          echo "GenerateMajorChannels: true" >> $OPERATOR_PATH
+          echo "GenerateMinorChannels: true" >> $OPERATOR_PATH
+          echo "Stable:" >> $OPERATOR_PATH
+          echo "  Bundles:" >> $OPERATOR_PATH
+          for tag in ${{ steps.get_tags.outputs.tags }}
+          do
+            echo "  - Image: ghcr.io/merkeg/minecraft-operator-bundle:$tag" >> $OPERATOR_PATH
+          done
+      - name: Get Template contents
+        run: cat ./catalog/minecraft-operator/minecraft-operator-template.yaml
+      - name: Build OPM catalog
+        env:
+          OPERATOR_TEMPLATE_PATH: "./catalog/minecraft-operator/minecraft-operator-template.yaml"
+          CATALOG_PATH: "./catalog/minecraft-operator/catalog.yaml"
+        run: |
+          ./catalog/opm alpha render-template semver -o yaml < $OPERATOR_TEMPLATE_PATH > CATALOG_PATH
       - name: Login to Github Registry
         uses: docker/login-action@v1
         with:
