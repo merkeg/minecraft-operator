@@ -5,3 +5,4 @@ Stable:
   Bundles:
   - Image: ghcr.io/merkeg/minecraft-operator-bundle:1.0.0
   - Image: ghcr.io/merkeg/minecraft-operator-bundle:1.0.1
+  - Image: ghcr.io/merkeg/minecraft-operator-bundle:1.0.2
