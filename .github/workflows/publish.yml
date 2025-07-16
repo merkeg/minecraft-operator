@@ -113,7 +113,7 @@ jobs:
           OPERATOR_TEMPLATE_PATH: "./catalog/minecraft-catalog/minecraft-operator/minecraft-operator-template.yaml"
           CATALOG_PATH: "./catalog/minecraft-catalog/catalog.yaml"
         run: |
-          ./catalog/opm alpha render-template semver -o yaml < $OPERATOR_TEMPLATE_PATH > CATALOG_PATH
+          ./catalog/opm alpha render-template semver -o yaml < $OPERATOR_TEMPLATE_PATH > $CATALOG_PATH
       - name: Get Catalog contents
         run: cat ./catalog/minecraft-catalog/catalog.yaml
       - name: Login to Github Registry
