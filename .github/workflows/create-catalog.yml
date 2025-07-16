@@ -1,13 +1,13 @@
 ## A basic GitHub Actions workflow for your Quarkus application.
 
-name: Build
+name: Update Catalog
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    name: "Build Image & push"
+    name: "Build catalog & push"
     runs-on: ubuntu-latest
     permissions:
       contents: read
