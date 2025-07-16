@@ -24,7 +24,7 @@ jobs:
           echo "tags=$tags" >> $GITHUB_OUTPUT
       - name: Generate YAML file
         env:
-          OPERATOR_PATH: "./catalog/minecraft-operator/minecraft-operator-template.yaml"
+          OPERATOR_PATH: "./catalog/minecraft-catalog/minecraft-operator/minecraft-operator-template.yaml"
         run: |
           echo "Schema: olm.semver" > $OPERATOR_PATH
           echo "GenerateMajorChannels: true" >> $OPERATOR_PATH
@@ -36,10 +36,10 @@ jobs:
             echo "  - Image: ghcr.io/merkeg/minecraft-operator-bundle:$tag" >> $OPERATOR_PATH
           done
       - name: Get Template contents
-        run: cat ./catalog/minecraft-operator/minecraft-operator-template.yaml
+        run: cat ./catalog/minecraft-catalog/minecraft-operator/minecraft-operator-template.yaml
       - name: Build OPM catalog
         env:
-          OPERATOR_TEMPLATE_PATH: "./catalog/minecraft-operator/minecraft-operator-template.yaml"
+          OPERATOR_TEMPLATE_PATH: "./catalog/minecraft-catalog/minecraft-operator/minecraft-operator-template.yaml"
           CATALOG_PATH: "./catalog/minecraft-operator/catalog.yaml"
         run: |
           ./catalog/opm alpha render-template semver -o yaml < $OPERATOR_TEMPLATE_PATH > CATALOG_PATH
