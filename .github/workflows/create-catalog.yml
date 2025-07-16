@@ -1,0 +1,32 @@
+## A basic GitHub Actions workflow for your Quarkus application.
+
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: "Build Image & push"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login to Github Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push catalog
+        uses: docker/build-push-action@v3
+        with:
+          context: ./catalog
+          file: ./catalog/minecraft-catalog.Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-catalog:latest
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}
+        
