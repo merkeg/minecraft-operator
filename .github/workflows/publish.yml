@@ -1,13 +1,9 @@
 ## A basic GitHub Actions workflow for your Quarkus application.
 
-name: Build
+name: Publish image and bundle
 
 on:
   push:
-    branches:
-      - master
-      - feature/*
-      - bugfix/*
     tags:
       - '*'
 

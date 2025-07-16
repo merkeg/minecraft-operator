@@ -24,7 +24,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 @CSVMetadata(
         bundleName = "minecraft-operator",
         requiredCRDs = @CSVMetadata.RequiredCRD(
-                kind = "Minecraft",
+                kind = "MinecraftServer",
                 name = MinecraftServer.NAME,
                 version = MinecraftServer.VERSION
         )

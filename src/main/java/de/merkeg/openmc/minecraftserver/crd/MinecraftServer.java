@@ -8,6 +8,7 @@ import io.fabric8.kubernetes.model.annotation.Version;
 
 @Group(MinecraftServer.GROUP)
 @Version(MinecraftServer.VERSION)
+@ShortNames("Minecraft")
 public class MinecraftServer extends CustomResource<MinecraftServerSpec, MinecraftServerStatus> implements Namespaced {
 
   public static final String GROUP = "openmc.merkeg.de";
