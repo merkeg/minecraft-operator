@@ -20,7 +20,7 @@ jobs:
         id: get_tags
         run: |
           git fetch --tags
-          tags=$(git tag --list "1.*" --sort=v:refname)
+          tags=$(git tag --list "1.*" --sort=v:refname | paste -sd "," -)
           echo "tags=$tags" >> $GITHUB_OUTPUT
       - name: Generate YAML file
         env:
