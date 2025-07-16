@@ -1,0 +1,13 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: minecraft-catalog
+  namespace: olm
+spec:
+  sourceType: grpc
+  image: ghcr.io/merkeg/minecraft-operator-catalog:latest
+  displayName: Minecraft Catalog
+  publisher: Egor Merk
+  updateStrategy:
+    registryPoll:
+      interval: 10m
