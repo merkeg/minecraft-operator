@@ -31,7 +31,8 @@ jobs:
           echo "GenerateMinorChannels: true" >> $OPERATOR_PATH
           echo "Stable:" >> $OPERATOR_PATH
           echo "  Bundles:" >> $OPERATOR_PATH
-          for tag in ${{ steps.get_tags.outputs.tags }}
+          IFS=',' read -ra TAGS <<< "${{ steps.get_tags.outputs.tags }}"
+          for tag in "${TAGS[@]}"
           do
             echo "  - Image: ghcr.io/merkeg/minecraft-operator-bundle:$tag" >> $OPERATOR_PATH
           done
