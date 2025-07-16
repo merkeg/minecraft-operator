@@ -1,3 +1,5 @@
 resources:
   - MinecraftCatalogSource.yaml
   - MinecraftOperatorSubscription.yaml
+  - MinecraftOperatorClusterRole.yaml
+  - MinecraftOperatorClusterRoleBinding.yaml

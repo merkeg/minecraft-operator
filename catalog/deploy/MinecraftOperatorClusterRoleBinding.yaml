@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: minecraft-operator-full-access-binding
+subjects:
+  - kind: ServiceAccount
+    name: minecraft-operator
+    namespace: operators
+roleRef:
+  kind: ClusterRole
+  name: minecraft-operator-full-access
+  apiGroup: rbac.authorization.k8s.io
