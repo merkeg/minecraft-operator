@@ -12,16 +12,31 @@ import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.base.PatchContext;
 import io.fabric8.kubernetes.client.dsl.base.PatchType;
-import io.javaoperatorsdk.operator.api.reconciler.Context;
-import io.javaoperatorsdk.operator.api.reconciler.ControllerConfiguration;
-import io.javaoperatorsdk.operator.api.reconciler.Reconciler;
-import io.javaoperatorsdk.operator.api.reconciler.UpdateControl;
+import io.javaoperatorsdk.operator.api.config.informer.Informer;
+import io.javaoperatorsdk.operator.api.reconciler.*;
+import io.quarkiverse.operatorsdk.annotations.CSVMetadata;
+import io.quarkiverse.operatorsdk.annotations.RBACRule;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
-@ControllerConfiguration()
+@CSVMetadata(
+        bundleName = "minecraft-operator",
+        requiredCRDs = @CSVMetadata.RequiredCRD(
+                kind = "Minecraft",
+                name = MinecraftServer.NAME,
+                version = MinecraftServer.VERSION
+        )
+)
+@ControllerConfiguration(
+        informer = @Informer(namespaces = Constants.WATCH_ALL_NAMESPACES)
+)
+@RBACRule(
+        apiGroups = MinecraftServer.GROUP,
+        resources = "minecraftservers",
+        verbs = RBACRule.ALL
+)
 @ApplicationScoped
 @Slf4j
 public class MinecraftServerReconciler implements Reconciler<MinecraftServer> {

@@ -1,0 +1,9 @@
+apiVersion: openmc.merkeg.de/v1
+kind: MinecraftServer
+metadata:
+  name: gameserver-2
+  namespace: skywars
+spec:
+  minecraftVersion: 1.21.7
+  serverEngine: PAPER
+  group: "skywars"

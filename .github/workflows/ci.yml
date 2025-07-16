@@ -60,6 +60,7 @@ jobs:
           K8S_NAMESPACE: ${{ github.event.repository.name }}
         run: |
           ./gradlew build \
+            --no-daemon \
             -Pversion=${{ steps.version.outputs.version }}\
             -Dquarkus.container-image.build=true \
             -Dquarkus.container-image.push=true \
